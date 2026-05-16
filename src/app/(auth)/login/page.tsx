@@ -103,7 +103,7 @@ export default function LoginPage() {
             </h1>
             <p className="text-white/70 text-lg leading-relaxed max-w-md">
               Set meaningful goals, track quarterly progress, and align your
-              team around what truly matters — all in one place.
+              team around what truly matters, all in one place.
             </p>
           </div>
 
@@ -136,7 +136,7 @@ export default function LoginPage() {
             style={{ background: "oklch(1 0 0 / 0.1)", border: "1px solid oklch(1 0 0 / 0.2)" }}
           >
             <Shield className="w-3 h-3" />
-            AtomQuest Hackathon 2026 — Production Ready
+            AtomQuest Hackathon 2026
           </div>
         </div>
       </div>
