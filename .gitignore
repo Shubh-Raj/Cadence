@@ -43,5 +43,6 @@ next-env.d.ts
 # prisma generated
 /src/generated/prisma
 
-# markdown docs
+# markdown docs (keep README tracked)
 *.md
+!README.md
