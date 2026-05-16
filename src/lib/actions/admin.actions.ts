@@ -6,7 +6,7 @@ import { AuditAction, GoalStatus, Role } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { THRUST_AREAS } from "./goal.actions";
+import { THRUST_AREAS } from "@/lib/goal-utils";
 
 async function requireAdmin() {
   const session = await getSession();
