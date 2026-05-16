@@ -2,7 +2,11 @@
     "crons": [
         {
             "path": "/api/cron/escalation",
-            "schedule": "0 9 * * *"
+            "schedule": "0 9 * * 1"
+        },
+        {
+            "path": "/api/cron/checkin-reminder",
+            "schedule": "0 8 1 7,10,1,4 *"
         }
     ]
 }
