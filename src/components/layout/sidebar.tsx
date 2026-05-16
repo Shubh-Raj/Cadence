@@ -8,7 +8,6 @@ import {
   LayoutDashboard,
   CheckSquare,
   Users,
-  Settings,
   BarChart3,
   LogOut,
   ClipboardList,
@@ -48,10 +47,11 @@ const NAV_MANAGER: NavItem[] = [
 
 const NAV_ADMIN: NavItem[] = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
-  { label: "All Employees", href: "/admin/employees", icon: Users },
+  { label: "Employees", href: "/admin/employees", icon: Users },
+  { label: "Push Goal", href: "/admin/goals", icon: Target },
   { label: "Analytics", href: "/admin/analytics", icon: BarChart3 },
+  { label: "Escalations", href: "/admin/escalations", icon: Bell },
   { label: "Audit Log", href: "/admin/audit", icon: ClipboardList },
-  { label: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
 const NAV_MAP = {
