@@ -7,6 +7,8 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { redirect } from "next/navigation";
 import { computeScore } from "@/lib/score-utils";
+import { sendCheckInCommentEmail } from "@/lib/email";
+import { notifyCheckInReviewed } from "@/lib/teams";
 
 // ── Schema ─────────────────────────────────────────────────────────────────────
 
@@ -119,6 +121,28 @@ export async function addManagerCommentAction(
       reviewedAt: new Date(),
     },
   });
+
+  // Notify employee via email and Teams with deep-link
+  const employeeUser = checkIn.goal.goalSheet.user;
+  const goalTitle    = checkIn.goal.title;
+  const checkInPath  = `/employee/checkins`;
+
+  await Promise.all([
+    sendCheckInCommentEmail({
+      employeeEmail: employeeUser.email,
+      employeeName:  employeeUser.name,
+      managerName:   session.name,
+      goalTitle,
+      comment:       validated.data.comment,
+      checkInPath,
+    }),
+    notifyCheckInReviewed({
+      employeeName: employeeUser.name,
+      managerName:  session.name,
+      goalTitle,
+      checkInPath,
+    }),
+  ]);
 
   await db.auditLog.create({
     data: {
