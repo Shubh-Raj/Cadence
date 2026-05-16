@@ -6,6 +6,7 @@ import { GoalStatus, UoMType, AuditAction } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { sendGoalSubmittedEmail } from "@/lib/email";
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 
@@ -239,6 +240,20 @@ export async function submitGoalSheetAction(sheetId: string) {
     where: { id: sheetId },
     data: { status: GoalStatus.PENDING_APPROVAL, submittedAt: new Date() },
   });
+
+  // Notify manager via email
+  const employee = await db.user.findUnique({
+    where: { id: session.userId },
+    include: { manager: { select: { email: true, name: true } } },
+  });
+  if (employee?.manager) {
+    await sendGoalSubmittedEmail({
+      managerEmail: employee.manager.email,
+      managerName: employee.manager.name,
+      employeeName: employee.name,
+      goalCount: sheet.goals.length,
+    });
+  }
 
   await writeAudit({
     action: AuditAction.GOAL_SUBMITTED,

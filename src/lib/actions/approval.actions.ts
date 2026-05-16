@@ -6,6 +6,7 @@ import { GoalStatus, AuditAction, Role } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { sendGoalApprovedEmail, sendGoalRejectedEmail } from "@/lib/email";
 
 async function requireManager() {
   const session = await getSession();
@@ -52,6 +53,18 @@ export async function approveGoalSheetAction(sheetId: string) {
       data: { isLocked: true },
     }),
   ]);
+
+  // Send email notification
+  const employeeUser = await db.user.findUnique({
+    where: { id: sheet.userId },
+    select: { email: true, name: true },
+  });
+  if (employeeUser) {
+    await sendGoalApprovedEmail({
+      employeeEmail: employeeUser.email,
+      employeeName: employeeUser.name,
+    });
+  }
 
   await writeAudit({
     action: AuditAction.GOAL_APPROVED,
@@ -102,6 +115,19 @@ export async function rejectGoalSheetAction(
       rejectionNote: validated.data.note,
     },
   });
+
+  // Send email notification
+  const employeeUser = await db.user.findUnique({
+    where: { id: sheet.userId },
+    select: { email: true, name: true },
+  });
+  if (employeeUser) {
+    await sendGoalRejectedEmail({
+      employeeEmail: employeeUser.email,
+      employeeName: employeeUser.name,
+      rejectionNote: validated.data.note,
+    });
+  }
 
   await writeAudit({
     action: AuditAction.GOAL_REJECTED,
