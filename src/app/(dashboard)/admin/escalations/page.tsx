@@ -4,7 +4,8 @@ import { redirect } from "next/navigation";
 import { Role, EscalationLevel } from "@prisma/client";
 import { Badge } from "@/components/ui/badge";
 import { ResolveEscalationButton } from "@/components/admin/resolve-escalation-button";
-import { AlertTriangle } from "lucide-react";
+import { TriggerCronButton } from "@/components/admin/trigger-cron-button";
+import { AlertTriangle, Clock, CheckCircle2 } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Escalations" };
@@ -36,11 +37,35 @@ export default async function EscalationsPage() {
 
   return (
     <div className="p-6 lg:p-8 space-y-8">
-      <div>
-        <h1 className="text-2xl font-heading font-bold text-foreground">Escalations</h1>
-        <p className="text-muted-foreground mt-1 text-sm">
-          {open.length} open · {resolved.length} resolved
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-2xl font-heading font-bold text-foreground">Escalations</h1>
+          <p className="text-muted-foreground mt-1 text-sm">
+            {open.length} open · {resolved.length} resolved
+          </p>
+        </div>
+        <TriggerCronButton name="Escalation Scan" path="/api/cron/escalation" />
+      </div>
+
+      {/* SLA Rules Summary */}
+      <div className="bg-card border border-border rounded-2xl p-5">
+        <p className="font-semibold text-foreground text-sm mb-3 flex items-center gap-2">
+          <Clock className="w-4 h-4 text-amber-500" />
+          Configured Escalation Rules
         </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {[
+            { rule: "Goal Submission Overdue", trigger: "14 days after cycle opens", level: "Manager notified", type: "NO_SUBMISSION" },
+            { rule: "Approval Overdue",        trigger: "7 days after employee submits", level: "HR/Admin notified", type: "APPROVAL_OVERDUE" },
+            { rule: "Check-in Missing",        trigger: "Active quarterly window", level: "Manager notified", type: "CHECKIN_MISSING" },
+          ].map(({ rule, trigger, level, type }) => (
+            <div key={type} className="rounded-xl border border-border bg-muted/30 p-3 space-y-1">
+              <p className="text-xs font-semibold text-foreground">{rule}</p>
+              <p className="text-xs text-muted-foreground">Triggers: {trigger}</p>
+              <p className="text-xs text-muted-foreground">Action: {level}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Open */}
