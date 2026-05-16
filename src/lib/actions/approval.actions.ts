@@ -7,6 +7,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { sendGoalApprovedEmail, sendGoalRejectedEmail } from "@/lib/email";
+import { notifyGoalApproved, notifyGoalRejected } from "@/lib/teams";
 
 async function requireManager() {
   const session = await getSession();
@@ -60,10 +61,16 @@ export async function approveGoalSheetAction(sheetId: string) {
     select: { email: true, name: true },
   });
   if (employeeUser) {
-    await sendGoalApprovedEmail({
-      employeeEmail: employeeUser.email,
-      employeeName: employeeUser.name,
-    });
+    await Promise.all([
+      sendGoalApprovedEmail({
+        employeeEmail: employeeUser.email,
+        employeeName: employeeUser.name,
+      }),
+      notifyGoalApproved({
+        employeeName: employeeUser.name,
+        managerName: session.name,
+      }),
+    ]);
   }
 
   await writeAudit({
@@ -122,11 +129,19 @@ export async function rejectGoalSheetAction(
     select: { email: true, name: true },
   });
   if (employeeUser) {
-    await sendGoalRejectedEmail({
-      employeeEmail: employeeUser.email,
-      employeeName: employeeUser.name,
-      rejectionNote: validated.data.note,
-    });
+    await Promise.all([
+      sendGoalRejectedEmail({
+        employeeEmail: employeeUser.email,
+        employeeName: employeeUser.name,
+        rejectionNote: validated.data.note,
+      }),
+      notifyGoalRejected({
+        employeeName: employeeUser.name,
+        managerName: session.name,
+        reason: validated.data.note,
+        sheetUserId: sheet.userId,
+      }),
+    ]);
   }
 
   await writeAudit({
