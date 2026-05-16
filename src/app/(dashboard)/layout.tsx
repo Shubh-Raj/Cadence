@@ -1,7 +1,6 @@
 import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { Sidebar } from "@/components/layout/sidebar";
-import { MobileSidebarWrapper } from "@/components/layout/mobile-sidebar-wrapper";
 
 export default async function DashboardLayout({
   children,
@@ -18,16 +17,12 @@ export default async function DashboardLayout({
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
-      {/* Desktop sidebar — hidden on mobile */}
-      <div className="hidden lg:flex">
-        <Sidebar {...sidebarProps} />
-      </div>
+    <div style={{ display: "flex", height: "100vh", overflow: "hidden", background: "var(--background)" }}>
+      {/* Sidebar — always visible, scrolls independently */}
+      <Sidebar {...sidebarProps} />
 
-      {/* Mobile: top bar + drawer */}
-      <MobileSidebarWrapper sidebarProps={sidebarProps} />
-
-      <main className="flex-1 overflow-y-auto">
+      {/* Main content */}
+      <main style={{ flex: 1, overflowY: "auto", minWidth: 0 }}>
         {children}
       </main>
     </div>
