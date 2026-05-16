@@ -114,3 +114,29 @@ export function ProgressLineChart({ data }: { data: PeriodScore[] }) {
     </ResponsiveContainer>
   );
 }
+
+// ── Manager effectiveness grouped bar chart ───────────────────────────────────
+
+type ManagerMetric = {
+  name: string;
+  "Submission %": number;
+  "Approval %": number;
+  "Comment Rate %": number;
+};
+
+export function ManagerEffectivenessChart({ data }: { data: ManagerMetric[] }) {
+  return (
+    <ResponsiveContainer width="100%" height={240}>
+      <BarChart data={data} barGap={3} barSize={16}>
+        <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.9 0.02 270)" />
+        <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+        <YAxis tick={{ fontSize: 11 }} domain={[0, 100]} unit="%" />
+        <Tooltip formatter={(v) => `${typeof v === "number" ? v : 0}%`} />
+        <Legend wrapperStyle={{ fontSize: 12 }} />
+        <Bar dataKey="Submission %" fill="oklch(0.55 0.26 270)" radius={[4, 4, 0, 0]} />
+        <Bar dataKey="Approval %" fill="oklch(0.62 0.20 155)" radius={[4, 4, 0, 0]} />
+        <Bar dataKey="Comment Rate %" fill="oklch(0.65 0.20 45)" radius={[4, 4, 0, 0]} />
+      </BarChart>
+    </ResponsiveContainer>
+  );
+}
