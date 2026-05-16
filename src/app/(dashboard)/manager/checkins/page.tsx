@@ -1,7 +1,7 @@
 import { getSession } from "@/lib/session";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
-import { getCurrentPeriod } from "@/lib/actions/checkin.actions";
+import { getCurrentPeriod } from "@/lib/score-utils";
 import { CheckInPeriod } from "@prisma/client";
 import { ManagerCommentForm } from "@/components/goals/manager-comment-form";
 import { Badge } from "@/components/ui/badge";

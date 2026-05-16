@@ -2,7 +2,7 @@ import { getSession } from "@/lib/session";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import { CheckInPeriod } from "@prisma/client";
-import { getCurrentPeriod } from "@/lib/actions/checkin.actions";
+import { getCurrentPeriod } from "@/lib/score-utils";
 import { CheckInForm } from "@/components/goals/checkin-form";
 import { Clock, Lock, AlertCircle } from "lucide-react";
 import type { Metadata } from "next";

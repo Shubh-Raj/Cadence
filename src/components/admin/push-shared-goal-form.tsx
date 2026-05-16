@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { pushSharedGoalAction } from "@/lib/actions/admin.actions";
-import { THRUST_AREAS } from "@/lib/actions/goal.actions";
+import { THRUST_AREAS } from "@/lib/goal-utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
