@@ -9,6 +9,7 @@ import {
   CheckSquare,
   Users,
   BarChart3,
+  TrendingUp,
   LogOut,
   ClipboardList,
   Bell,
@@ -50,6 +51,7 @@ const NAV_ADMIN: NavItem[] = [
   { label: "Employees", href: "/admin/employees", icon: Users },
   { label: "Push Goal", href: "/admin/goals", icon: Target },
   { label: "Analytics", href: "/admin/analytics", icon: BarChart3 },
+  { label: "Mgr Effectiveness", href: "/admin/analytics/manager-effectiveness", icon: TrendingUp },
   { label: "Escalations", href: "/admin/escalations", icon: Bell },
   { label: "Audit Log", href: "/admin/audit", icon: ClipboardList },
 ];
