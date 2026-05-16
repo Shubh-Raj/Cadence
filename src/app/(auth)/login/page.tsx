@@ -41,9 +41,9 @@ const features = [
 ];
 
 const demoAccounts = [
-  { role: "Employee", email: "employee@atomquest.dev", pass: "Employee@123" },
-  { role: "Manager", email: "manager@atomquest.dev", pass: "Manager@123" },
-  { role: "Admin / HR", email: "admin@atomquest.dev", pass: "Admin@123" },
+  { role: "Employee", email: "employee@cadence.dev", pass: "Employee@123" },
+  { role: "Manager", email: "manager@cadence.dev", pass: "Manager@123" },
+  { role: "Admin / HR", email: "admin@cadence.dev", pass: "Admin@123" },
 ];
 
 export default function LoginPage({
@@ -99,7 +99,7 @@ export default function LoginPage({
             <Target className="w-5 h-5 text-white" />
           </div>
           <span className="text-white font-heading font-bold text-xl">
-            AtomQuest
+            Cadence
           </span>
         </div>
 
@@ -160,7 +160,7 @@ export default function LoginPage({
               <Target className="w-4 h-4 text-white" />
             </div>
             <span className="font-heading font-bold text-lg text-foreground">
-              AtomQuest
+              Cadence
             </span>
           </div>
 

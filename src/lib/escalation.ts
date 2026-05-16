@@ -44,7 +44,7 @@ async function sendEscalationEmail(to: string, name: string, reason: string, lev
            style="display:inline-block;margin-top:20px;padding:12px 24px;background:#7c3aed;color:#fff;border-radius:8px;text-decoration:none;font-weight:600">
           View Escalations →
         </a>
-        <p style="margin-top:32px;font-size:12px;color:#9ca3af">AtomQuest Portal · ${new Date().getFullYear()}</p>
+        <p style="margin-top:32px;font-size:12px;color:#9ca3af">Cadence Portal · ${new Date().getFullYear()}</p>
       </div>
     `,
   });

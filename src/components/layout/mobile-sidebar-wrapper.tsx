@@ -23,9 +23,9 @@ export function MobileSidebarWrapper({
       <div className="lg:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4 py-3 bg-sidebar border-b border-sidebar-border">
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-lg gradient-brand flex items-center justify-center">
-            <span className="text-white text-xs font-bold">AQ</span>
+            <span className="text-white text-xs font-bold">C</span>
           </div>
-          <span className="font-heading font-bold text-white text-sm">AtomQuest</span>
+          <span className="font-heading font-bold text-white text-sm">Cadence</span>
         </div>
         <button
           id="mobile-menu-btn"

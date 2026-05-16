@@ -96,7 +96,7 @@ export function Sidebar({ role, userName, userEmail }: SidebarProps) {
         </div>
         <div>
           <span className="font-heading font-bold text-white text-base leading-none">
-            AtomQuest
+            Cadence
           </span>
           <p className="text-sidebar-foreground/50 text-[10px] mt-0.5 leading-none">
             Goal Portal

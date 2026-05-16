@@ -100,7 +100,7 @@ export async function GET(request: NextRequest) {
   return new NextResponse(csv, {
     headers: {
       "Content-Type": "text/csv",
-      "Content-Disposition": `attachment; filename="atomquest-${year}.csv"`,
+      "Content-Disposition": `attachment; filename="cadence-${year}.csv"`,
     },
   });
 }

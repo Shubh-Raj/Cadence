@@ -1,7 +1,7 @@
 import "server-only";
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const FROM_EMAIL = "AtomQuest Portal <noreply@atomquest.dev>";
+const FROM_EMAIL = "Cadence Portal <noreply@cadence.dev>";
 
 type EmailPayload = {
   to: string;
@@ -11,7 +11,6 @@ type EmailPayload = {
 
 export async function sendEmail({ to, subject, html }: EmailPayload) {
   if (!RESEND_API_KEY) {
-    // Graceful no-op in dev if key not set
     console.log(`[email] RESEND_API_KEY not set — skipping email to ${to}: ${subject}`);
     return;
   }
@@ -57,7 +56,7 @@ export async function sendGoalSubmittedEmail({
            style="display:inline-block;margin-top:20px;padding:12px 24px;background:#7c3aed;color:#fff;border-radius:8px;text-decoration:none;font-weight:600">
           Review Goals →
         </a>
-        <p style="margin-top:32px;font-size:12px;color:#9ca3af">AtomQuest Portal · ${new Date().getFullYear()}</p>
+        <p style="margin-top:32px;font-size:12px;color:#9ca3af">Cadence Portal · ${new Date().getFullYear()}</p>
       </div>
     `,
   });
@@ -83,7 +82,7 @@ export async function sendGoalApprovedEmail({
            style="display:inline-block;margin-top:20px;padding:12px 24px;background:#7c3aed;color:#fff;border-radius:8px;text-decoration:none;font-weight:600">
           View Check-ins →
         </a>
-        <p style="margin-top:32px;font-size:12px;color:#9ca3af">AtomQuest Portal · ${new Date().getFullYear()}</p>
+        <p style="margin-top:32px;font-size:12px;color:#9ca3af">Cadence Portal · ${new Date().getFullYear()}</p>
       </div>
     `,
   });
@@ -113,7 +112,7 @@ export async function sendGoalRejectedEmail({
            style="display:inline-block;margin-top:20px;padding:12px 24px;background:#7c3aed;color:#fff;border-radius:8px;text-decoration:none;font-weight:600">
           Update Goals →
         </a>
-        <p style="margin-top:32px;font-size:12px;color:#9ca3af">AtomQuest Portal · ${new Date().getFullYear()}</p>
+        <p style="margin-top:32px;font-size:12px;color:#9ca3af">Cadence Portal · ${new Date().getFullYear()}</p>
       </div>
     `,
   });

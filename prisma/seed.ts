@@ -23,10 +23,10 @@ async function main() {
   // ADMIN
   // ─────────────────────────────────────────────────────────────────────────
   const admin = await db.user.upsert({
-    where: { email: "admin@atomquest.dev" },
+    where: { email: "admin@cadence.dev" },
     update: {},
     create: {
-      email: "admin@atomquest.dev",
+      email: "admin@cadence.dev",
       name: "Priya Sharma",
       role: Role.ADMIN,
       department: "HR",
@@ -38,10 +38,10 @@ async function main() {
   // MANAGERS
   // ─────────────────────────────────────────────────────────────────────────
   const mgr1 = await db.user.upsert({
-    where: { email: "manager@atomquest.dev" },
+    where: { email: "manager@cadence.dev" },
     update: {},
     create: {
-      email: "manager@atomquest.dev",
+      email: "manager@cadence.dev",
       name: "Arjun Mehta",
       role: Role.MANAGER,
       department: "Engineering",
@@ -50,10 +50,10 @@ async function main() {
   });
 
   const mgr2 = await db.user.upsert({
-    where: { email: "sales.manager@atomquest.dev" },
+    where: { email: "sales.manager@cadence.dev" },
     update: {},
     create: {
-      email: "sales.manager@atomquest.dev",
+      email: "sales.manager@cadence.dev",
       name: "Kavya Nair",
       role: Role.MANAGER,
       department: "Sales",
@@ -66,35 +66,35 @@ async function main() {
   // ─────────────────────────────────────────────────────────────────────────
   const empDefs = [
     {
-      email: "employee@atomquest.dev",
+      email: "employee@cadence.dev",
       name: "Rohan Verma",
       department: "Engineering",
       managerId: mgr1.id,
       password: "Employee@123",
     },
     {
-      email: "dev2@atomquest.dev",
+      email: "dev2@cadence.dev",
       name: "Sneha Pillai",
       department: "Engineering",
       managerId: mgr1.id,
       password: "Employee@123",
     },
     {
-      email: "dev3@atomquest.dev",
+      email: "dev3@cadence.dev",
       name: "Kiran Rao",
       department: "Engineering",
       managerId: mgr1.id,
       password: "Employee@123",
     },
     {
-      email: "sales1@atomquest.dev",
+      email: "sales1@cadence.dev",
       name: "Anjali Singh",
       department: "Sales",
       managerId: mgr2.id,
       password: "Employee@123",
     },
     {
-      email: "sales2@atomquest.dev",
+      email: "sales2@cadence.dev",
       name: "Deepak Kumar",
       department: "Sales",
       managerId: mgr2.id,
@@ -372,14 +372,14 @@ async function main() {
 
   // ─────────────────────────────────────────────────────────────────────────
   console.log("\n✅  Users seeded:");
-  console.log("   Admin    → admin@atomquest.dev        / Admin@123");
-  console.log("   Manager  → manager@atomquest.dev      / Manager@123  (Engineering)");
-  console.log("   Manager  → sales.manager@atomquest.dev / Manager@123  (Sales)");
-  console.log("   Employee → employee@atomquest.dev     / Employee@123  [Approved + check-ins]");
-  console.log("   Employee → dev2@atomquest.dev         / Employee@123  [Pending approval]");
-  console.log("   Employee → dev3@atomquest.dev         / Employee@123  [Rejected]");
-  console.log("   Employee → sales1@atomquest.dev       / Employee@123  [Approved + check-ins]");
-  console.log("   Employee → sales2@atomquest.dev       / Employee@123  [Draft]");
+  console.log("   Admin    → admin@cadence.dev        / Admin@123");
+  console.log("   Manager  → manager@cadence.dev      / Manager@123  (Engineering)");
+  console.log("   Manager  → sales.manager@cadence.dev / Manager@123  (Sales)");
+  console.log("   Employee → employee@cadence.dev     / Employee@123  [Approved + check-ins]");
+  console.log("   Employee → dev2@cadence.dev         / Employee@123  [Pending approval]");
+  console.log("   Employee → dev3@cadence.dev         / Employee@123  [Rejected]");
+  console.log("   Employee → sales1@cadence.dev       / Employee@123  [Approved + check-ins]");
+  console.log("   Employee → sales2@cadence.dev       / Employee@123  [Draft]");
   console.log("\n✅  Goal sheets, goals, and Q1 check-ins seeded.");
 }
 

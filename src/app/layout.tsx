@@ -12,12 +12,12 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | AtomQuest",
-    default: "AtomQuest — Goal Setting & Tracking Portal",
+    template: "%s | Cadence",
+    default: "Cadence — Goal Setting & Tracking Portal",
   },
   description:
     "A production-ready Goal Setting & Tracking Portal for AtomQuest Hackathon 2026. Track goals, drive performance, and align teams.",
-  keywords: ["goal setting", "OKR", "performance tracking", "AtomQuest"],
+  keywords: ["goal setting", "OKR", "performance tracking", "Cadence"],
 };
 
 export default function RootLayout({
