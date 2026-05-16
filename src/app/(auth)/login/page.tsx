@@ -46,11 +46,21 @@ const demoAccounts = [
   { role: "Admin / HR", email: "admin@atomquest.dev", pass: "Admin@123" },
 ];
 
-export default function LoginPage() {
+export default function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
   const [state, action, pending] = useActionState<LoginState, FormData>(
     loginAction,
     undefined
   );
+
+  // SSO error from ?error= param (shown once, no server round-trip needed)
+  const ssoErrors: Record<string, string> = {
+    sso_failed: "Microsoft sign-in was cancelled or failed. Try again.",
+    not_provisioned: "Your Microsoft account is not registered in this portal. Contact your admin.",
+  };
 
   return (
     <div className="flex w-full min-h-screen">
@@ -242,6 +252,33 @@ export default function LoginPage() {
               )}
             </Button>
           </form>
+
+          {/* Microsoft SSO */}
+          {process.env.NEXT_PUBLIC_AZURE_SSO_ENABLED === "true" && (
+            <>
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-px bg-border" />
+                <span className="text-xs text-muted-foreground font-medium">or</span>
+                <div className="flex-1 h-px bg-border" />
+              </div>
+              <a href="/api/auth/signin/microsoft-entra-id" className="block">
+                <button
+                  id="sso-btn"
+                  type="button"
+                  className="w-full h-11 flex items-center justify-center gap-3 rounded-xl border border-border bg-card hover:bg-muted transition-colors text-sm font-semibold text-foreground"
+                >
+                  {/* Microsoft logo */}
+                  <svg width="18" height="18" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="1" y="1" width="9" height="9" fill="#F25022"/>
+                    <rect x="11" y="1" width="9" height="9" fill="#7FBA00"/>
+                    <rect x="1" y="11" width="9" height="9" fill="#00A4EF"/>
+                    <rect x="11" y="11" width="9" height="9" fill="#FFB900"/>
+                  </svg>
+                  Sign in with Microsoft
+                </button>
+              </a>
+            </>
+          )}
 
           {/* Demo accounts */}
           <div className="space-y-3">
