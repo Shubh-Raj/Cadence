@@ -1,0 +1,229 @@
+// This is your Prisma schema file
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────────────────────────
+// Enums
+// ─────────────────────────────────────────────
+
+enum Role {
+  EMPLOYEE
+  MANAGER
+  ADMIN
+}
+
+enum GoalStatus {
+  DRAFT
+  PENDING_APPROVAL
+  APPROVED
+  REJECTED
+  LOCKED
+}
+
+enum UoMType {
+  MIN      // Higher is better (e.g. revenue)
+  MAX      // Lower is better (e.g. TAT, cost)
+  TIMELINE // Date-based completion
+  ZERO     // Zero = success (e.g. safety incidents)
+}
+
+enum CheckInPeriod {
+  Q1 // July
+  Q2 // October
+  Q3 // January
+  Q4 // March/April (annual)
+}
+
+enum EscalationLevel {
+  EMPLOYEE
+  MANAGER
+  HR
+}
+
+enum AuditAction {
+  GOAL_CREATED
+  GOAL_SUBMITTED
+  GOAL_APPROVED
+  GOAL_REJECTED
+  GOAL_EDITED_BY_MANAGER
+  GOAL_UNLOCKED_BY_ADMIN
+  CHECKIN_SUBMITTED
+  CHECKIN_COMMENTED
+  SHARED_GOAL_PUSHED
+}
+
+// ─────────────────────────────────────────────
+// User & Org Hierarchy
+// ─────────────────────────────────────────────
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String
+  role          Role     @default(EMPLOYEE)
+  department    String?
+  azureAdId     String?  @unique
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Self-referencing manager relation
+  managerId     String?
+  manager       User?    @relation("ReportsTo", fields: [managerId], references: [id])
+  directReports User[]   @relation("ReportsTo")
+
+  // Relations
+  goalSheets        GoalSheet[]
+  checkIns          CheckIn[]
+  auditLogs         AuditLog[]
+  escalationsOwned  EscalationLog[] @relation("EscalatedEmployee")
+  managerComments   CheckIn[]       @relation("CheckInReviewer")
+
+  @@index([managerId])
+  @@index([role])
+  @@map("users")
+}
+
+// ─────────────────────────────────────────────
+// Goal Sheet (one per employee per cycle year)
+// ─────────────────────────────────────────────
+
+model GoalSheet {
+  id          String     @id @default(cuid())
+  cycleYear   Int        // e.g. 2026
+  status      GoalStatus @default(DRAFT)
+  submittedAt DateTime?
+  approvedAt  DateTime?
+  rejectedAt  DateTime?
+  rejectionNote String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  userId      String
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  goals       Goal[]
+  auditLogs   AuditLog[]
+
+  @@unique([userId, cycleYear])
+  @@index([userId])
+  @@index([status])
+  @@map("goal_sheets")
+}
+
+// ─────────────────────────────────────────────
+// Individual Goal
+// ─────────────────────────────────────────────
+
+model Goal {
+  id           String   @id @default(cuid())
+  title        String
+  description  String?
+  thrustArea   String
+  uomType      UoMType
+  targetValue  Float    // numeric/% target or deadline (stored as unix ms for timeline)
+  weightage    Float    // must be between 10 and 100; sheet total must equal 100
+  isLocked     Boolean  @default(false)
+  isShared     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  goalSheetId  String
+  goalSheet    GoalSheet @relation(fields: [goalSheetId], references: [id], onDelete: Cascade)
+
+  // If this goal was pushed from a shared/parent goal
+  parentGoalId String?
+  parentGoal   Goal?    @relation("SharedGoal", fields: [parentGoalId], references: [id])
+  sharedCopies Goal[]   @relation("SharedGoal")
+
+  checkIns     CheckIn[]
+
+  @@index([goalSheetId])
+  @@index([thrustArea])
+  @@map("goals")
+}
+
+// ─────────────────────────────────────────────
+// Quarterly Check-in
+// ─────────────────────────────────────────────
+
+model CheckIn {
+  id              String        @id @default(cuid())
+  period          CheckInPeriod
+  cycleYear       Int
+  actualValue     Float?
+  status          String        @default("NOT_STARTED") // NOT_STARTED | ON_TRACK | COMPLETED
+  computedScore   Float?        // system-calculated progress score
+  employeeNote    String?
+  reviewerComment String?
+  reviewedAt      DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  goalId          String
+  goal            Goal          @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  employeeId      String
+  employee        User          @relation(fields: [employeeId], references: [id])
+
+  reviewerId      String?
+  reviewer        User?         @relation("CheckInReviewer", fields: [reviewerId], references: [id])
+
+  @@unique([goalId, period, cycleYear])
+  @@index([employeeId])
+  @@index([period, cycleYear])
+  @@map("check_ins")
+}
+
+// ─────────────────────────────────────────────
+// Escalation Log
+// ─────────────────────────────────────────────
+
+model EscalationLog {
+  id          String          @id @default(cuid())
+  level       EscalationLevel
+  reason      String
+  notifiedAt  DateTime        @default(now())
+  resolvedAt  DateTime?
+  isResolved  Boolean         @default(false)
+  metadata    Json?           // stores extra context (e.g. days overdue, cycle info)
+  createdAt   DateTime        @default(now())
+
+  employeeId  String
+  employee    User            @relation("EscalatedEmployee", fields: [employeeId], references: [id])
+
+  @@index([employeeId])
+  @@index([isResolved])
+  @@map("escalation_logs")
+}
+
+// ─────────────────────────────────────────────
+// Audit Log
+// ─────────────────────────────────────────────
+
+model AuditLog {
+  id           String      @id @default(cuid())
+  action       AuditAction
+  entityType   String      // "Goal" | "GoalSheet" | "CheckIn"
+  entityId     String
+  changedById  String
+  changedBy    User        @relation(fields: [changedById], references: [id])
+  goalSheetId  String?
+  goalSheet    GoalSheet?  @relation(fields: [goalSheetId], references: [id])
+  before       Json?       // snapshot before the change
+  after        Json?       // snapshot after the change
+  note         String?
+  createdAt    DateTime    @default(now())
+
+  @@index([entityId])
+  @@index([changedById])
+  @@index([goalSheetId])
+  @@map("audit_logs")
+}
