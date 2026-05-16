@@ -8,22 +8,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { sendGoalSubmittedEmail } from "@/lib/email";
 import { notifyGoalSubmitted } from "@/lib/teams";
-
-// ── Constants ──────────────────────────────────────────────────────────────────
-
-export const THRUST_AREAS = [
-  "Business Growth",
-  "Customer Excellence",
-  "Operational Efficiency",
-  "People & Culture",
-  "Innovation",
-  "Quality & Compliance",
-  "Cost Optimisation",
-  "Safety & ESG",
-] as const;
-
-export const MAX_GOALS = 8;
-export const MIN_WEIGHTAGE = 10;
+import { THRUST_AREAS, MAX_GOALS, MIN_WEIGHTAGE } from "@/lib/goal-utils";
 
 // ── Schema ─────────────────────────────────────────────────────────────────────
 
