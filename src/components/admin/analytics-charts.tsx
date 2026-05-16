@@ -115,6 +115,61 @@ export function ProgressLineChart({ data }: { data: PeriodScore[] }) {
   );
 }
 
+// ── UoM type distribution bar chart ──────────────────────────────────────────
+
+export function UoMDistributionChart({ data }: { data: { name: string; value: number }[] }) {
+  return (
+    <ResponsiveContainer width="100%" height={200}>
+      <BarChart data={data} barSize={32}>
+        <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.9 0.02 270)" />
+        <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+        <YAxis tick={{ fontSize: 11 }} allowDecimals={false} />
+        <Tooltip />
+        <Bar dataKey="value" name="Goals" radius={[6, 6, 0, 0]}>
+          {data.map((_, i) => (
+            <Cell key={i} fill={PIE_COLOURS[i % PIE_COLOURS.length]} />
+          ))}
+        </Bar>
+      </BarChart>
+    </ResponsiveContainer>
+  );
+}
+
+// ── Goal status distribution radial / pie ─────────────────────────────────────
+
+export function GoalStatusPieChart({ data }: { data: { name: string; value: number }[] }) {
+  const STATUS_COLORS: Record<string, string> = {
+    Draft: "oklch(0.65 0.05 270)",
+    "Pending Approval": "oklch(0.78 0.18 85)",
+    Approved: "oklch(0.62 0.20 155)",
+    Rejected: "oklch(0.55 0.24 25)",
+    Locked: "oklch(0.55 0.26 270)",
+  };
+  return (
+    <ResponsiveContainer width="100%" height={220}>
+      <PieChart>
+        <Pie
+          data={data}
+          cx="50%" cy="50%"
+          outerRadius={80} innerRadius={42}
+          dataKey="value"
+          label={({ name, percent }) =>
+            (percent ?? 0) > 0.05 ? `${name} ${Math.round((percent ?? 0) * 100)}%` : ""
+          }
+          labelLine={false}
+          fontSize={11}
+        >
+          {data.map((entry, i) => (
+            <Cell key={i} fill={STATUS_COLORS[entry.name] ?? PIE_COLOURS[i % PIE_COLOURS.length]} />
+          ))}
+        </Pie>
+        <Tooltip formatter={(v) => `${v} goals`} />
+        <Legend wrapperStyle={{ fontSize: 11 }} />
+      </PieChart>
+    </ResponsiveContainer>
+  );
+}
+
 // ── Manager effectiveness grouped bar chart ───────────────────────────────────
 
 type ManagerMetric = {
