@@ -7,6 +7,8 @@ import {
   SubmissionBarChart,
   ThrustAreaPieChart,
   ProgressLineChart,
+  UoMDistributionChart,
+  GoalStatusPieChart,
 } from "@/components/admin/analytics-charts";
 import type { Metadata } from "next";
 
@@ -18,12 +20,12 @@ export default async function AdminAnalyticsPage() {
 
   const cycleYear = new Date().getFullYear();
 
-  const [totalEmployees, sheets, checkIns] = await Promise.all([
+  const [totalEmployees, sheets, checkIns, allGoals] = await Promise.all([
     db.user.count({ where: { role: Role.EMPLOYEE } }),
     db.goalSheet.findMany({
       where: { cycleYear },
       include: {
-        goals: { select: { thrustArea: true, weightage: true } },
+        goals: { select: { thrustArea: true, weightage: true, uomType: true } },
         user: { select: { department: true } },
       },
     }),
@@ -31,6 +33,7 @@ export default async function AdminAnalyticsPage() {
       where: { cycleYear },
       select: { computedScore: true, period: true },
     }),
+    db.goal.findMany({ select: { uomType: true } }),
   ]);
 
   const submitted = sheets.filter((s) =>
@@ -69,6 +72,29 @@ export default async function AdminAnalyticsPage() {
     }
   }
   const thrustData = Object.entries(thrustMap).map(([name, value]) => ({ name, value }));
+
+  // UoM distribution
+  const uomMap: Record<string, number> = {};
+  for (const s of sheets) {
+    for (const g of s.goals) {
+      uomMap[g.uomType] = (uomMap[g.uomType] ?? 0) + 1;
+    }
+  }
+  const UOM_LABELS: Record<string, string> = { MIN: "Maximize", MAX: "Minimize", TIMELINE: "Timeline", ZERO: "Zero-Based" };
+  const uomData = Object.entries(uomMap).map(([k, v]) => ({ name: UOM_LABELS[k] ?? k, value: v }));
+
+  // Goal status distribution
+  const statusMap: Record<string, number> = { Draft: 0, "Pending Approval": 0, Approved: 0, Rejected: 0, Locked: 0 };
+  for (const s of sheets) {
+    if (s.status === GoalStatus.DRAFT) statusMap.Draft++;
+    else if (s.status === GoalStatus.PENDING_APPROVAL) statusMap["Pending Approval"]++;
+    else if (s.status === GoalStatus.APPROVED) statusMap.Approved++;
+    else if (s.status === GoalStatus.REJECTED) statusMap.Rejected++;
+    else if (s.status === GoalStatus.LOCKED) statusMap.Locked++;
+  }
+  const statusData = Object.entries(statusMap)
+    .filter(([, v]) => v > 0)
+    .map(([name, value]) => ({ name, value }));
 
   // QoQ line data
   const periodOrder: CheckInPeriod[] = [CheckInPeriod.Q1, CheckInPeriod.Q2, CheckInPeriod.Q3, CheckInPeriod.Q4];
@@ -155,6 +181,26 @@ export default async function AdminAnalyticsPage() {
           Quarter-on-Quarter Average Progress Score
         </p>
         <ProgressLineChart data={periodData} />
+      </div>
+
+      {/* UoM + Status distribution row */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-card border border-border rounded-2xl p-5">
+          <p className="font-semibold text-foreground text-sm mb-4">Goal Distribution by UoM Type</p>
+          {uomData.length > 0 ? (
+            <UoMDistributionChart data={uomData} />
+          ) : (
+            <p className="text-muted-foreground text-sm text-center py-10">No goals yet</p>
+          )}
+        </div>
+        <div className="bg-card border border-border rounded-2xl p-5">
+          <p className="font-semibold text-foreground text-sm mb-4">Goal Sheet Status Breakdown</p>
+          {statusData.length > 0 ? (
+            <GoalStatusPieChart data={statusData} />
+          ) : (
+            <p className="text-muted-foreground text-sm text-center py-10">No sheets yet</p>
+          )}
+        </div>
       </div>
 
       {/* Dept table */}
