@@ -10,7 +10,7 @@ const ROLE_ROUTES: Record<string, Role[]> = {
   "/admin": [Role.ADMIN],
 };
 
-const PUBLIC_ROUTES = ["/login"];
+const PUBLIC_ROUTES = ["/login", "/sso-callback", "/api/auth"];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
