@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { sendGoalSubmittedEmail } from "@/lib/email";
+import { notifyGoalSubmitted } from "@/lib/teams";
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 
@@ -244,15 +245,23 @@ export async function submitGoalSheetAction(sheetId: string) {
   // Notify manager via email
   const employee = await db.user.findUnique({
     where: { id: session.userId },
-    include: { manager: { select: { email: true, name: true } } },
+    include: { manager: { select: { id: true, email: true, name: true } } },
   });
   if (employee?.manager) {
-    await sendGoalSubmittedEmail({
-      managerEmail: employee.manager.email,
-      managerName: employee.manager.name,
-      employeeName: employee.name,
-      goalCount: sheet.goals.length,
-    });
+    await Promise.all([
+      sendGoalSubmittedEmail({
+        managerEmail: employee.manager.email,
+        managerName: employee.manager.name,
+        employeeName: employee.name,
+        goalCount: sheet.goals.length,
+      }),
+      notifyGoalSubmitted({
+        employeeName: employee.name,
+        managerId: employee.manager.id ?? "",
+        goalCount: sheet.goals.length,
+        sheetUserId: session.userId,
+      }),
+    ]);
   }
 
   await writeAudit({
