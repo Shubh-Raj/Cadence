@@ -2,66 +2,59 @@
 
 import { useState } from "react";
 import { Sidebar } from "@/components/layout/sidebar";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Zap } from "lucide-react";
 
-type SidebarProps = {
-  role: "EMPLOYEE" | "MANAGER" | "ADMIN";
-  userName: string;
-  userEmail: string;
-};
+type SidebarProps = { role: "EMPLOYEE" | "MANAGER" | "ADMIN"; userName: string; userEmail: string; };
 
-export function MobileSidebarWrapper({
-  sidebarProps,
-}: {
-  sidebarProps: SidebarProps;
-}) {
+export function MobileSidebarWrapper({ sidebarProps }: { sidebarProps: SidebarProps }) {
   const [open, setOpen] = useState(false);
 
   return (
     <>
       {/* Mobile top bar */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4 py-3 bg-sidebar border-b border-sidebar-border">
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg gradient-brand flex items-center justify-center">
-            <span className="text-white text-xs font-bold">C</span>
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        padding: "12px 16px", background: "#0C0C12",
+        borderBottom: "1px solid rgba(255,255,255,0.07)",
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 40,
+        fontFamily: "'Space Grotesk', sans-serif",
+      }} className="lg:hidden">
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ width: 32, height: 32, background: "#FAFF00", clipPath: "polygon(50% 0%,100% 50%,50% 100%,0% 50%)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Zap size={15} strokeWidth={3} color="#06060A" />
           </div>
-          <span className="font-heading font-bold text-white text-sm">Cadence</span>
+          <span style={{ fontWeight: 700, color: "#fff", fontSize: 16, letterSpacing: "-0.5px" }}>Cadence</span>
         </div>
         <button
           id="mobile-menu-btn"
           onClick={() => setOpen(true)}
-          className="text-sidebar-foreground/70 hover:text-white transition-colors"
+          style={{ background: "transparent", border: "none", color: "rgba(255,255,255,0.5)", cursor: "pointer", padding: 4 }}
           aria-label="Open menu"
         >
-          <Menu className="w-5 h-5" />
+          <Menu size={20} />
         </button>
       </div>
 
-      {/* Spacer for fixed top bar */}
-      <div className="lg:hidden h-[52px] w-full" />
+      {/* Spacer */}
+      <div className="lg:hidden" style={{ height: 52 }} />
 
-      {/* Drawer overlay */}
+      {/* Drawer */}
       {open && (
         <div
-          className="lg:hidden fixed inset-0 z-50 flex"
+          style={{ position: "fixed", inset: 0, zIndex: 50, display: "flex" }}
+          className="lg:hidden"
           onClick={() => setOpen(false)}
         >
-          {/* Backdrop */}
-          <div className="absolute inset-0 bg-black/60" />
-
-          {/* Drawer panel */}
-          <div
-            className="relative z-10 w-64 h-full"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.75)" }} />
+          <div style={{ position: "relative", zIndex: 10, width: 240, height: "100%" }} onClick={e => e.stopPropagation()}>
             <Sidebar {...sidebarProps} />
             <button
               id="mobile-close-btn"
               onClick={() => setOpen(false)}
-              className="absolute top-4 right-4 text-sidebar-foreground/60 hover:text-white transition-colors"
+              style={{ position: "absolute", top: 16, right: 16, background: "transparent", border: "none", color: "rgba(255,255,255,0.4)", cursor: "pointer" }}
               aria-label="Close menu"
             >
-              <X className="w-4 h-4" />
+              <X size={16} />
             </button>
           </div>
         </div>
