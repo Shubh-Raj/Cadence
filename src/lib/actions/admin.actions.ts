@@ -116,3 +116,20 @@ export async function pushSharedGoalAction(
   revalidatePath("/admin");
   return { success: true };
 }
+
+// ── Trigger Cron Manually ──────────────────────────────────────────────────────
+
+export async function triggerCronAction(path: string) {
+  await requireAdmin();
+  const url = `${process.env.NEXT_PUBLIC_APP_URL}${path}`;
+  try {
+    const res = await fetch(url, {
+      method: "GET",
+      headers: { "x-cron-secret": process.env.CRON_SECRET ?? "" },
+    });
+    const data = await res.json();
+    return { success: res.ok, data };
+  } catch (error) {
+    return { success: false, data: { error: "Network or Server Error" } };
+  }
+}
