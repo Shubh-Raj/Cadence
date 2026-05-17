@@ -6,16 +6,16 @@ import { Mail, Lock, ArrowRight, Loader2, Zap, Shield, Target, TrendingUp, Users
 import { useTheme } from "next-themes";
 
 const demoAccounts = [
-  { role: "Employee",   email: "employee@cadence.dev", pass: "Employee@123", color: "var(--brand-yellow)" },
-  { role: "Manager",    email: "manager@cadence.dev",  pass: "Manager@123",  color: "var(--brand-pink)" },
-  { role: "Admin / HR", email: "admin@cadence.dev",    pass: "Admin@123",    color: "var(--brand-cyan)" },
+  { role: "Employee", email: "employee@cadence.dev", pass: "Employee@123", color: "var(--brand-yellow)" },
+  { role: "Manager", email: "manager@cadence.dev", pass: "Manager@123", color: "var(--brand-pink)" },
+  { role: "Admin / HR", email: "admin@cadence.dev", pass: "Admin@123", color: "var(--brand-cyan)" },
 ];
 
 const stats = [
-  { icon: Target,    label: "Goal Setting",    value: "8 Max" },
-  { icon: TrendingUp,label: "Quarterly Cycles",value: "Q1–Q4" },
-  { icon: Users,     label: "Team Oversight",  value: "3 Roles" },
-  { icon: BarChart3, label: "Analytics",       value: "Live" },
+  { icon: Target, label: "Goal Setting", value: "8 Max" },
+  { icon: TrendingUp, label: "Quarterly Cycles", value: "Q1–Q4" },
+  { icon: Users, label: "Team Oversight", value: "3 Roles" },
+  { icon: BarChart3, label: "Analytics", value: "Live" },
 ];
 
 export default function LoginPage() {
@@ -33,7 +33,7 @@ export default function LoginPage() {
   }, []);
 
   function fillDemo(email: string, pass: string, el: HTMLElement) {
-    if (emailRef.current)    { emailRef.current.value = email; emailRef.current.dispatchEvent(new Event("input", { bubbles: true })); }
+    if (emailRef.current) { emailRef.current.value = email; emailRef.current.dispatchEvent(new Event("input", { bubbles: true })); }
     if (passwordRef.current) { passwordRef.current.value = pass; passwordRef.current.dispatchEvent(new Event("input", { bubbles: true })); }
     // Brief flash on the row
     el.style.background = "rgba(250,255,0,0.12)";
@@ -70,7 +70,7 @@ export default function LoginPage() {
     const isDark = resolvedTheme !== "light";
     const r = isDark ? 250 : 108;
     const g = isDark ? 255 : 71;
-    const b = isDark ? 0   : 255;
+    const b = isDark ? 0 : 255;
 
     const resize = () => {
       canvas.width = canvas.offsetWidth;
@@ -264,258 +264,258 @@ export default function LoginPage() {
 
       <div className="login-wrapper">
         <div className="lr">
-        {/* LEFT */}
-        <div className="ll">
-          <div className="ll-glow1" />
-          <div className="ll-glow2" />
-          <canvas ref={canvasRef} className="cg" />
-          <div className="g-ring"><div className="g-ring2" /></div>
-          <div className="g-tri" />
-          <div className="g-sq" />
+          {/* LEFT */}
+          <div className="ll">
+            <div className="ll-glow1" />
+            <div className="ll-glow2" />
+            <canvas ref={canvasRef} className="cg" />
+            <div className="g-ring"><div className="g-ring2" /></div>
+            <div className="g-tri" />
+            <div className="g-sq" />
 
-          <div className="logo hal">
-            <div className="logo-icon">
-              <Zap size={20} strokeWidth={3} color="#06060A" />
+            <div className="logo hal">
+              <div className="logo-icon">
+                <Zap size={20} strokeWidth={3} color="#06060A" />
+              </div>
+              <div>
+                <div className="logo-name">Cadence</div>
+                <div className="logo-sub">Goal Portal</div>
+              </div>
             </div>
-            <div>
-              <div className="logo-name">Cadence</div>
-              <div className="logo-sub">Goal Portal</div>
+
+            <div className="hero hal">
+              <div className="eyebrow">
+                <span className="eyebrow-dot" />
+                Enterprise Performance
+              </div>
+              <h1 className="h1">
+                Drive <span className="y">Goals.</span><br />
+                Track <span className="p">Progress.</span><br />
+                Win Together.
+              </h1>
+              <p className="hsub">
+                Set meaningful goals, align teams with OKRs, and track quarterly achievement, all in one high-velocity platform.
+              </p>
+              <div className="sg">
+                {stats.map(({ icon: Icon, label, value }) => (
+                  <div className="sc" key={label}>
+                    <Icon size={18} style={{ color: "var(--brand-yellow)", flexShrink: 0 }} />
+                    <div>
+                      <span className="sc-label" style={{ display: "block", marginBottom: 2 }}>{label}</span>
+                      <span className="sc-val">{value}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="badge hal">
+              <Shield size={11} />
+              AtomQuest Hackathon 2026
             </div>
           </div>
 
-          <div className="hero hal">
-            <div className="eyebrow">
-              <span className="eyebrow-dot" />
-              Enterprise Performance
-            </div>
-            <h1 className="h1">
-              Drive <span className="y">Goals.</span><br />
-              Track <span className="p">Progress.</span><br />
-              Win Together.
-            </h1>
-            <p className="hsub">
-              Set meaningful goals, align teams with OKRs, and track quarterly achievement, all in one high-velocity platform.
-            </p>
-            <div className="sg">
-              {stats.map(({ icon: Icon, label, value }) => (
-                <div className="sc" key={label}>
-                  <Icon size={18} style={{ color: "var(--brand-yellow)", flexShrink: 0 }} />
-                  <div>
-                    <span className="sc-label" style={{ display: "block", marginBottom: 2 }}>{label}</span>
-                    <span className="sc-val">{value}</span>
+          {/* RIGHT */}
+          <div className="lr-right">
+            {mounted && (
+              <button
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                style={{ position: "absolute", top: 20, right: 20, background: "transparent", border: "none", cursor: "pointer", color: "var(--foreground)", opacity: 0.7, zIndex: 10 }}
+                title="Toggle Theme"
+              >
+                {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
+            )}
+            <div className="fc">
+              <div className="mlogo">
+                <div className="mlogo-icon" />
+                <span className="mlogo-name">Cadence</span>
+              </div>
+
+              <div className="fh a1">
+                <p className="fey">Access Portal</p>
+                <h2 className="ft">Welcome<br />Back.</h2>
+                <p className="fs">Sign in to your goal dashboard</p>
+              </div>
+
+              {state?.message && (
+                <div className="ferr a1">
+                  <Shield size={14} style={{ flexShrink: 0 }} />
+                  {state.message}
+                </div>
+              )}
+
+              <form action={action}>
+                <div className="ig a2">
+                  <label className="il" htmlFor="email">Work Email</label>
+                  <div className="iw">
+                    <Mail size={16} className="ii" />
+                    <input ref={emailRef} id="email" name="email" type="email" autoComplete="email"
+                      placeholder="you@company.com" className="li" aria-describedby="email-error" />
+                  </div>
+                  {state?.errors?.email && <p id="email-error" className="ie">{state.errors.email[0]}</p>}
+                </div>
+
+                <div className="ig a3">
+                  <label className="il" htmlFor="password">Password</label>
+                  <div className="iw">
+                    <Lock size={16} className="ii" />
+                    <input ref={passwordRef} id="password" name="password" type="password" autoComplete="current-password"
+                      placeholder="••••••••" className="li" aria-describedby="password-error" />
+                  </div>
+                  {state?.errors?.password && <p id="password-error" className="ie">{state.errors.password[0]}</p>}
+                </div>
+
+                <button id="login-submit" type="submit" disabled={pending} className="sb a4">
+                  {pending
+                    ? <><Loader2 size={16} className="spin" /> Signing in…</>
+                    : <>Sign In <ArrowRight size={16} /></>}
+                </button>
+
+                <div className="dv a5"><div className="dvl" /><span className="dvt">or</span><div className="dvl" /></div>
+
+                <button
+                  type="button"
+                  onClick={handleSSOClick}
+                  disabled={ssoChecking}
+                  className="sso a5"
+                  id="sso-btn"
+                >
+                  {ssoChecking ? (
+                    <Loader2 size={16} className="spin" />
+                  ) : (
+                    <svg width="18" height="18" viewBox="0 0 21 21" fill="none">
+                      <rect x="1" y="1" width="9" height="9" fill="#F25022" />
+                      <rect x="11" y="1" width="9" height="9" fill="#7FBA00" />
+                      <rect x="1" y="11" width="9" height="9" fill="#00A4EF" />
+                      <rect x="11" y="11" width="9" height="9" fill="#FFB900" />
+                    </svg>
+                  )}
+                  Sign in with Microsoft
+                </button>
+
+                <div className="dem a5">
+                  <p className="dh"><MousePointer2 size={12} /> Click a demo account to autofill</p>
+                  <div className="dl">
+                    {demoAccounts.map(({ role, email, pass, color }) => (
+                      <div
+                        className="dr"
+                        key={role}
+                        style={{ borderLeftColor: color, cursor: "pointer", transition: "all 0.25s" }}
+                        onClick={e => fillDemo(email, pass, e.currentTarget)}
+                        title={`Click to fill: ${email}`}
+                      >
+                        <div>
+                          <p className="drl">{role}</p>
+                          <p className="dre">{email}</p>
+                        </div>
+                        <code className="drp" style={{ color }}>{pass}</code>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              ))}
+              </form>
             </div>
-          </div>
-
-          <div className="badge hal">
-            <Shield size={11} />
-            AtomQuest Hackathon 2026
           </div>
         </div>
 
-        {/* RIGHT */}
-        <div className="lr-right">
-          {mounted && (
-            <button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              style={{ position: "absolute", top: 20, right: 20, background: "transparent", border: "none", cursor: "pointer", color: "var(--foreground)", opacity: 0.7, zIndex: 10 }}
-              title="Toggle Theme"
-            >
-              {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
-          )}
-          <div className="fc">
-            <div className="mlogo">
-              <div className="mlogo-icon" />
-              <span className="mlogo-name">Cadence</span>
+        {/* NEW SHOWCASE SECTION */}
+        <div className="showcase">
+          <div className="sh-bg-1" />
+          <div className="sh-bg-2" />
+          <div className="sh-bg-3" />
+          <div className="sh-mesh" />
+          {/* Decorative floating shapes behind glassmorphism */}
+          <div className="g-ring" style={{ top: '20%', right: '5%', zIndex: 1, opacity: 0.5 }}><div className="g-ring2" /></div>
+          <div className="g-sq" style={{ top: '60%', left: '10%', zIndex: 1, opacity: 0.5 }} />
+          <div className="g-tri" style={{ top: '80%', right: '20%', zIndex: 1, opacity: 0.5 }} />
+
+          <div className="sh-container">
+            <h2 className="sh-title">Platform <span>Capabilities</span></h2>
+            <p className="sh-sub">Built to handle complex enterprise performance workflows out-of-the-box.</p>
+
+            <div className="sh-grid">
+              {/* Feature 1 */}
+              <div className="sh-card">
+                <div className="sh-card-icon"><Target size={24} /></div>
+                <div>
+                  <h3 className="sh-card-title">Goal Creation & Approval</h3>
+                  <p className="sh-card-desc">Define thrust areas, strict weightage rules (min 10%, max 100%), and L1 manager approval cycles.</p>
+                </div>
+                <div className="sh-mock">
+                  <div className="m-row"><div className="m-circle" style={{ background: 'var(--y)', color: '#000' }}>Q1</div><div className="m-bar" style={{ width: '40%' }}></div></div>
+                  <div className="m-row"><div className="m-circle">Q2</div><div className="m-bar" style={{ width: '70%' }}></div></div>
+                  <div className="m-row"><div className="m-circle">Q3</div><div className="m-bar y" style={{ width: '20%' }}></div></div>
+                </div>
+              </div>
+
+              {/* Feature 2 */}
+              <div className="sh-card">
+                <div className="sh-card-icon"><CheckCircle2 size={24} /></div>
+                <div>
+                  <h3 className="sh-card-title">Quarterly Check-ins</h3>
+                  <p className="sh-card-desc">Enforced quarterly windows for achievement capture, complete with manager commentary and computed scores.</p>
+                </div>
+                <div className="sh-mock" style={{ justifyContent: 'space-around' }}>
+                  <div className="m-row"><div style={{ fontSize: 12, fontWeight: 600, width: 40 }}>Target</div><div className="m-bar" style={{ flex: 1 }}></div></div>
+                  <div className="m-row"><div style={{ fontSize: 12, fontWeight: 600, width: 40 }}>Actual</div><div className="m-bar y" style={{ width: '60%' }}></div></div>
+                </div>
+              </div>
+
+              {/* Feature 3 */}
+              <div className="sh-card">
+                <div className="sh-card-icon"><Workflow size={24} /></div>
+                <div>
+                  <h3 className="sh-card-title">Shared Departmental KPIs</h3>
+                  <p className="sh-card-desc">Push goals top-down to multiple employees. Achievement syncs seamlessly while allowing individual weightage tweaks.</p>
+                </div>
+                <div className="sh-mock" style={{ alignItems: 'center' }}>
+                  <div className="m-bar p" style={{ width: 80, marginBottom: 8 }}></div>
+                  <div className="m-row" style={{ width: '100%' }}>
+                    <div className="m-circle" style={{ width: 16, height: 16 }}></div><div className="m-line"></div>
+                    <div className="m-circle" style={{ width: 16, height: 16 }}></div><div className="m-line"></div>
+                    <div className="m-circle" style={{ width: 16, height: 16 }}></div>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="fh a1">
-              <p className="fey">Access Portal</p>
-              <h2 className="ft">Welcome<br />Back.</h2>
-              <p className="fs">Sign in to your goal dashboard</p>
+            <div className="sh-bonus">
+              <h4 className="sh-b-title">Enterprise Add-ons</h4>
+              <div className="sh-b-grid">
+                <div className="sh-b-card">
+                  <div className="sh-b-icon"><Server size={18} /></div>
+                  <div>
+                    <div className="sh-b-card-title">Entra ID (SSO) Sync</div>
+                    <div className="sh-b-card-desc">Auto-provision roles and reporting hierarchies via Azure AD groups.</div>
+                  </div>
+                </div>
+                <div className="sh-b-card">
+                  <div className="sh-b-icon"><MailPlus size={18} /></div>
+                  <div>
+                    <div className="sh-b-card-title">Teams Integration</div>
+                    <div className="sh-b-card-desc">Adaptive cards, deep links, and email notifications for cycle events.</div>
+                  </div>
+                </div>
+                <div className="sh-b-card">
+                  <div className="sh-b-icon"><BellRing size={18} /></div>
+                  <div>
+                    <div className="sh-b-card-title">Escalation Engine</div>
+                    <div className="sh-b-card-desc">Rule-based auto-alerts that trigger skip-level HR notifications for delays.</div>
+                  </div>
+                </div>
+                <div className="sh-b-card">
+                  <div className="sh-b-icon"><ChartBar size={18} /></div>
+                  <div>
+                    <div className="sh-b-card-title">Advanced Analytics</div>
+                    <div className="sh-b-card-desc">QoQ achievement trends and L1 manager effectiveness dashboards.</div>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {state?.message && (
-              <div className="ferr a1">
-                <Shield size={14} style={{ flexShrink: 0 }} />
-                {state.message}
-              </div>
-            )}
-
-            <form action={action}>
-              <div className="ig a2">
-                <label className="il" htmlFor="email">Work Email</label>
-                <div className="iw">
-                  <Mail size={16} className="ii" />
-                  <input ref={emailRef} id="email" name="email" type="email" autoComplete="email"
-                    placeholder="you@company.com" className="li" aria-describedby="email-error" />
-                </div>
-                {state?.errors?.email && <p id="email-error" className="ie">{state.errors.email[0]}</p>}
-              </div>
-
-              <div className="ig a3">
-                <label className="il" htmlFor="password">Password</label>
-                <div className="iw">
-                  <Lock size={16} className="ii" />
-                  <input ref={passwordRef} id="password" name="password" type="password" autoComplete="current-password"
-                    placeholder="••••••••" className="li" aria-describedby="password-error" />
-                </div>
-                {state?.errors?.password && <p id="password-error" className="ie">{state.errors.password[0]}</p>}
-              </div>
-
-              <button id="login-submit" type="submit" disabled={pending} className="sb a4">
-                {pending
-                  ? <><Loader2 size={16} className="spin" /> Signing in…</>
-                  : <>Sign In <ArrowRight size={16} /></>}
-              </button>
-
-              <div className="dv a5"><div className="dvl" /><span className="dvt">or</span><div className="dvl" /></div>
-
-              <button
-                type="button"
-                onClick={handleSSOClick}
-                disabled={ssoChecking}
-                className="sso a5"
-                id="sso-btn"
-              >
-                {ssoChecking ? (
-                  <Loader2 size={16} className="spin" />
-                ) : (
-                  <svg width="18" height="18" viewBox="0 0 21 21" fill="none">
-                    <rect x="1" y="1" width="9" height="9" fill="#F25022"/>
-                    <rect x="11" y="1" width="9" height="9" fill="#7FBA00"/>
-                    <rect x="1" y="11" width="9" height="9" fill="#00A4EF"/>
-                    <rect x="11" y="11" width="9" height="9" fill="#FFB900"/>
-                  </svg>
-                )}
-                Sign in with Microsoft
-              </button>
-
-              <div className="dem a5">
-                <p className="dh"><MousePointer2 size={12} /> Click a demo account to autofill</p>
-                <div className="dl">
-                  {demoAccounts.map(({ role, email, pass, color }) => (
-                    <div
-                      className="dr"
-                      key={role}
-                      style={{ borderLeftColor: color, cursor: "pointer", transition: "all 0.25s" }}
-                      onClick={e => fillDemo(email, pass, e.currentTarget)}
-                      title={`Click to fill: ${email}`}
-                    >
-                      <div>
-                        <p className="drl">{role}</p>
-                        <p className="dre">{email}</p>
-                      </div>
-                      <code className="drp" style={{ color }}>{pass}</code>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </form>
           </div>
         </div>
-      </div>
-
-      {/* NEW SHOWCASE SECTION */}
-      <div className="showcase">
-        <div className="sh-bg-1" />
-        <div className="sh-bg-2" />
-        <div className="sh-bg-3" />
-        <div className="sh-mesh" />
-        {/* Decorative floating shapes behind glassmorphism */}
-        <div className="g-ring" style={{top:'20%', right:'5%', zIndex:1, opacity:0.5}}><div className="g-ring2" /></div>
-        <div className="g-sq" style={{top:'60%', left:'10%', zIndex:1, opacity:0.5}} />
-        <div className="g-tri" style={{top:'80%', right:'20%', zIndex:1, opacity:0.5}} />
-        
-        <div className="sh-container">
-          <h2 className="sh-title">Platform <span>Capabilities</span></h2>
-          <p className="sh-sub">Built to handle complex enterprise performance workflows out-of-the-box.</p>
-          
-          <div className="sh-grid">
-            {/* Feature 1 */}
-            <div className="sh-card">
-              <div className="sh-card-icon"><Target size={24} /></div>
-              <div>
-                <h3 className="sh-card-title">Goal Creation & Approval</h3>
-                <p className="sh-card-desc">Define thrust areas, strict weightage rules (min 10%, max 100%), and L1 manager approval cycles.</p>
-              </div>
-              <div className="sh-mock">
-                <div className="m-row"><div className="m-circle" style={{background:'var(--y)', color:'#000'}}>Q1</div><div className="m-bar" style={{width:'40%'}}></div></div>
-                <div className="m-row"><div className="m-circle">Q2</div><div className="m-bar" style={{width:'70%'}}></div></div>
-                <div className="m-row"><div className="m-circle">Q3</div><div className="m-bar y" style={{width:'20%'}}></div></div>
-              </div>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="sh-card">
-              <div className="sh-card-icon"><CheckCircle2 size={24} /></div>
-              <div>
-                <h3 className="sh-card-title">Quarterly Check-ins</h3>
-                <p className="sh-card-desc">Enforced quarterly windows for achievement capture, complete with manager commentary and computed scores.</p>
-              </div>
-              <div className="sh-mock" style={{justifyContent:'space-around'}}>
-                <div className="m-row"><div style={{fontSize:12, fontWeight:600, width:40}}>Target</div><div className="m-bar" style={{flex:1}}></div></div>
-                <div className="m-row"><div style={{fontSize:12, fontWeight:600, width:40}}>Actual</div><div className="m-bar y" style={{width:'60%'}}></div></div>
-              </div>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="sh-card">
-              <div className="sh-card-icon"><Workflow size={24} /></div>
-              <div>
-                <h3 className="sh-card-title">Shared Departmental KPIs</h3>
-                <p className="sh-card-desc">Push goals top-down to multiple employees. Achievement syncs seamlessly while allowing individual weightage tweaks.</p>
-              </div>
-              <div className="sh-mock" style={{alignItems:'center'}}>
-                <div className="m-bar p" style={{width:80, marginBottom:8}}></div>
-                <div className="m-row" style={{width:'100%'}}>
-                  <div className="m-circle" style={{width:16,height:16}}></div><div className="m-line"></div>
-                  <div className="m-circle" style={{width:16,height:16}}></div><div className="m-line"></div>
-                  <div className="m-circle" style={{width:16,height:16}}></div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="sh-bonus">
-            <h4 className="sh-b-title">Enterprise Add-ons</h4>
-            <div className="sh-b-grid">
-              <div className="sh-b-card">
-                <div className="sh-b-icon"><Server size={18} /></div>
-                <div>
-                  <div className="sh-b-card-title">Entra ID (SSO) Sync</div>
-                  <div className="sh-b-card-desc">Auto-provision roles and reporting hierarchies via Azure AD groups.</div>
-                </div>
-              </div>
-              <div className="sh-b-card">
-                <div className="sh-b-icon"><MailPlus size={18} /></div>
-                <div>
-                  <div className="sh-b-card-title">Teams Integration</div>
-                  <div className="sh-b-card-desc">Adaptive cards, deep links, and email notifications for cycle events.</div>
-                </div>
-              </div>
-              <div className="sh-b-card">
-                <div className="sh-b-icon"><BellRing size={18} /></div>
-                <div>
-                  <div className="sh-b-card-title">Escalation Engine</div>
-                  <div className="sh-b-card-desc">Rule-based auto-alerts that trigger skip-level HR notifications for delays.</div>
-                </div>
-              </div>
-              <div className="sh-b-card">
-                <div className="sh-b-icon"><ChartBar size={18} /></div>
-                <div>
-                  <div className="sh-b-card-title">Advanced Analytics</div>
-                  <div className="sh-b-card-desc">QoQ achievement trends and L1 manager effectiveness dashboards.</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-        </div>
-      </div>
       </div>
 
       {/* ── SSO Setup Modal ───────────────────────────────────────────────── */}
@@ -534,22 +534,15 @@ export default function LoginPage() {
               <div className="flex items-center gap-3">
                 <div style={{ background: "rgba(59,130,246,0.12)", borderRadius: 12, padding: 10 }}>
                   <svg width="22" height="22" viewBox="0 0 21 21" fill="none">
-                    <rect x="1" y="1" width="9" height="9" fill="#F25022"/>
-                    <rect x="11" y="1" width="9" height="9" fill="#7FBA00"/>
-                    <rect x="1" y="11" width="9" height="9" fill="#00A4EF"/>
-                    <rect x="11" y="11" width="9" height="9" fill="#FFB900"/>
+                    <rect x="1" y="1" width="9" height="9" fill="#F25022" />
+                    <rect x="11" y="1" width="9" height="9" fill="#7FBA00" />
+                    <rect x="1" y="11" width="9" height="9" fill="#00A4EF" />
+                    <rect x="11" y="11" width="9" height="9" fill="#FFB900" />
                   </svg>
                 </div>
-                <div className="flex-1">
-                  <h2 style={{ fontWeight: 700, fontSize: 17, lineHeight: 1.3 }} className="text-foreground flex items-center gap-2 flex-wrap">
-                    Microsoft SSO Setup
-                    <span className="text-[10px] bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider shrink-0">
-                      100% Implemented
-                    </span>
-                  </h2>
-                  <p className="text-muted-foreground text-xs mt-1">
-                    The SSO integration (OAuth, auto-provisioning, role mapping) is fully built. You just need to configure your Azure AD environment variables to test it.
-                  </p>
+                <div>
+                  <h2 style={{ fontWeight: 700, fontSize: 17, lineHeight: 1.3 }} className="text-foreground">Microsoft SSO Setup Required</h2>
+                  <p className="text-muted-foreground text-xs mt-0.5">Azure AD is not yet configured. Follow these steps to enable it.</p>
                 </div>
               </div>
               <button
